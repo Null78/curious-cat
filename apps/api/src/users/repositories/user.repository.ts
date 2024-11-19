@@ -7,6 +7,16 @@ import { EdgeDBService } from '../../edgedb/services/edgedb.service';
 export class UserRepository {
     constructor(private db: EdgeDBService) {}
 
+    create(name: string, username: string, email: string, password: string) {
+        return e.insert(e.auth.User, {
+            name,
+            username,
+            email,
+            password,
+            created_at: new Date(),
+        }).run(this.db.client);
+    }
+
     list() {
         let query = e.select(e.auth.User, () => ({
             ...e.auth.User['*']
@@ -15,12 +25,17 @@ export class UserRepository {
         return query.run(this.db.client);
     }
 
-    find(id: User['id']) {
-        let query = e.select(e.auth.User, (user) => ({
+    async find(id: User['id']) {
+        return (await e.select(e.auth.User, (user) => ({
             ...e.auth.User['*'],
             filter_single: e.op(user.id, '=', id)
-        }));
+        })).run(this.db.client))[0];
+    }
 
-        return query.run(this.db.client);
+    findByEmail(email: User['email']) {
+        return e.select(e.auth.User, (user) => ({
+            ...e.auth.User['*'],
+            filter_single: e.op(user.email, "=", email)
+        })).run(this.db.client);
     }
 }

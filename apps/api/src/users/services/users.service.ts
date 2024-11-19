@@ -1,28 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { UserRepository } from '../repositories/user.repository';
+import { generateUsername } from "unique-username-generator";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
     constructor(private repository: UserRepository) { }
 
-    //   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    //     return new UserEntity(
-    //       await this.prisma.user.create({
-    //         data: {
-    //           firstName: createUserDto.firstName,
-    //           lastName: createUserDto.lastName,
-    //           email: createUserDto.email,
-    //           phone: createUserDto?.phone,
-    //           role: {
-    //             connect: {
-    //               id: createUserDto.roleId,
-    //             },
-    //           },
-    //         },
-    //       }),
-    //     );
-    //   }
+    async create(
+        name: string,
+        email: string,
+        password: string,
+    ): Promise<{ id: string }> {
+        return this.repository.create(
+            name,
+            generateUsername('_', 4),
+            email,
+            await bcrypt.hash(password, 10)
+        );
+    }
 
     list(): Promise<User[]> {
         return this.repository.list();
@@ -30,6 +27,10 @@ export class UsersService {
 
     find(id: User['id']) {
         return this.repository.find(id);
+    }
+
+    findByEmail(email: User['email']) {
+        return this.repository.findByEmail(email);
     }
 
     //   async findOneByEmail(email: User['email']): Promise<UserEntity> {

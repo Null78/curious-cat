@@ -6,6 +6,9 @@ module auth {
         required email: str;
         required password: str;
         email_verified_at: datetime;
+
+        constraint exclusive on (.email);
+        constraint exclusive on (.username);
     }
 
     type Role extending default::Entity, default::SoftDeleteable {
