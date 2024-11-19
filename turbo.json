@@ -1,6 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "ui": "stream",
+  "globalEnv": [
+    "EDGEDB_DSN"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -13,6 +16,18 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "edge:generate:js": {
+      "dependsOn": ["^edge:generate:js"]
+    },
+    "edge:generate:interfaces": {
+      "dependsOn": ["^edge:generate:interfaces"]
+    },
+    "edge:new:migration": {
+      "dependsOn": ["^edge:new:migration"]
+    },
+    "edge:migrate": {
+      "dependsOn": ["^edge:migrate"]
     }
   }
 }

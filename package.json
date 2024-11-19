@@ -5,6 +5,9 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "edge:generate": "turbo edge:generate:js edge:generate:interfaces",
+    "edge:new:migration": "turbo edge:new:migration",
+    "edge:migrate": "turbo edge:migrate",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -19,5 +22,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "edgedb": "^1.5.12"
+  }
 }
