@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { generateUsername } from "unique-username-generator";
-import * as bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +17,7 @@ export class UsersService {
             name,
             generateUsername('_', 4),
             email,
-            await bcrypt.hash(password, 10)
+            await hash(password, 10),
         );
     }
 

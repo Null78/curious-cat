@@ -1,6 +1,11 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/entities/user.entity';
+import { hash } from 'bcrypt';
+import { InvalidCredentialsException } from '../exceptions/invalid-credentials.exception';
+import { instanceToPlain } from 'class-transformer';
+import { AuthDto } from '../dtos/auth.dto';
 // import { UserLoginDto } from '../dto/user-login.dto';
 // import * as bcrypt from 'bcrypt';
 // import { RoleEntity } from '../../roles/entities/role.entity';
@@ -32,33 +37,30 @@ export class AuthService {
     return this.usersService.create(name, email, password);
   }
 
-//   login(user: UserEntity): AuthenticationDto {
-//     const payload = {
-//       sub: user.id,
-//       user: instanceToPlain(user),
-//     };
-//     return new AuthenticationDto({
-//       access_token: this.jwtService.sign(payload),
-//     });
-//   }
+  login(user: User): AuthDto {
+    const payload = {
+      sub: user.id,
+      user: instanceToPlain(user),
+    };
+    return new AuthDto({
+      access_token: this.jwtService.sign(payload),
+    });
+  }
 
-//   async validateUserCredentials(
-//     email: string,
-//     password: string,
-//   ): Promise<UserEntity> {
-//     const user: UserEntity = await this.usersService.findByEmail(
-//       email,
-//     );
+  async validateUserCredentials(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    const user = (await this.usersService.findByEmail(
+      email,
+    ))[0];
 
-//     const credentials: CredentialsAccount =
-//       await this.usersService.findUserCredentials(user);
-
-//     if (!(await bcrypt.compare(password, credentials.password))) {
-//       throw new InvalidCredentialsException();
-//     } else {
-//       return user;
-//     }
-//   }
+    if (!(await hash(password, 10))) {
+      throw new InvalidCredentialsException();
+    } else {
+      return user;
+    }
+  }
 
 //   async getUserRole(access_token: string): Promise<RoleEntity> {
 //     const token = new JwtTokenDto(this.jwtService.decode(access_token));
