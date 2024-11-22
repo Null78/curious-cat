@@ -13,7 +13,7 @@ type PermissionGroupDefinition = {
 }
 
 @Injectable()
-class PermissionsSeeder implements Seeder {
+export class PermissionsSeeder implements Seeder {
     constructor(private db: EdgeDBService) { }
 
     setup(definitions: Definitions) {

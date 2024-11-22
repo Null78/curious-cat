@@ -5,12 +5,16 @@ import { PassportModule } from "@nestjs/passport";
 import { UsersModule } from "src/users/users.module";
 import { AuthController } from "./controllers/auth.controller";
 import { AuthService } from "./services/auth.service";
+import { SeedCommand } from "./commands/seed";
+import { PermissionsSeeder } from "./seeders/permissions.seeder";
+import { EdgeDBModule } from "src/edgedb/edgedb.module";
 
 @Module({
 	controllers: [AuthController],
 	imports: [
 		UsersModule,
 		PassportModule,
+		EdgeDBModule,
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
 			useFactory: async (configService: ConfigService) => ({
@@ -20,7 +24,7 @@ import { AuthService } from "./services/auth.service";
 			inject: [ConfigService],
 		})
 	],
-	providers: [AuthService],
+	providers: [AuthService, PermissionsSeeder, SeedCommand],
 	exports: [],
 })
 export class AuthModule { }

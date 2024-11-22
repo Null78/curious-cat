@@ -1,9 +1,11 @@
-CREATE MIGRATION m1sv5fyqulflfskz3qkg7nahzuegnji3qmu6n27uv7fdhnpuvtkdla
+CREATE MIGRATION m1mbxr7blhvwn6d5oi3epecmww363rdv5fjgbrn2nnovlvosttzbdq
     ONTO initial
 {
   CREATE MODULE auth IF NOT EXISTS;
   CREATE ABSTRACT TYPE default::Entity {
-      CREATE REQUIRED PROPERTY created_at: std::datetime;
+      CREATE REQUIRED PROPERTY created_at: std::datetime {
+          SET default := (std::datetime_current());
+      };
       CREATE PROPERTY updated_at: std::datetime;
   };
   CREATE TYPE auth::Permission EXTENDING default::Entity {
