@@ -1,9 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { auth } from "@packages/db/dbschema/interfaces";
-import { Type } from "class-transformer";
-import { Role } from "src/auth/entities/role.entity";
 
-export class User implements auth.User {
+export class Permission implements auth.Permission {
     @ApiProperty()
     id: string;
 
@@ -11,20 +9,10 @@ export class User implements auth.User {
     name: string;
 
     @ApiProperty()
-    username: string;
+    display_name: string;
 
     @ApiProperty()
-    email: string;
-
-    @ApiProperty()
-    email_verified_at?: Date;
-
-    @ApiProperty()
-    password: string;
-
-    @ApiProperty({ type: Role })
-    @Type(() => Role)
-    role: Role;
+    permission_group: string;
 
     @ApiProperty()
     created_at: Date;

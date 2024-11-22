@@ -5,7 +5,7 @@ import {
   IsString,
   IsStrongPassword,
 } from 'class-validator';
-import { IsEqualTo } from 'src/utils/rules/is-equal-to';
+import { IsEqualTo } from 'src/shared/rules/is-equal-to.rule';
 
 export class CreateUserDto {
   @ApiProperty()

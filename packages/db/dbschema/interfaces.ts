@@ -25,34 +25,31 @@ export namespace $default {
 export type Entity = $default.Entity;
 export type SoftDeleteable = $default.SoftDeleteable;
 export namespace auth {
-  export interface PermissionGrants extends $default.Entity {
+  export interface Permission extends $default.Entity {
+    "name": string;
+    "permission_group": string;
+    "display_name": string;
+  }
+  export interface PermissionGrant extends $default.Entity {
     "permission": string;
     "provider": string;
     "provider_id": string;
   }
-  export interface PermissionGroups extends $default.Entity {
-    "display_name": string;
+  export interface PermissionGroup extends $default.Entity {
     "name": string;
-  }
-  export interface Permissions extends $default.Entity {
     "display_name": string;
-    "name": string;
-    "permission_group": string;
   }
   export interface Role extends $default.Entity, $default.SoftDeleteable {
-    "display_name": string;
     "name": string;
+    "display_name": string;
   }
   export interface User extends $default.Entity, $default.SoftDeleteable {
+    "role": Role;
+    "username": string;
     "email": string;
     "email_verified_at"?: Date | null;
     "name": string;
     "password": string;
-    "username": string;
-  }
-  export interface UserRoles extends $default.Entity, $default.SoftDeleteable {
-    "role": Role;
-    "user": User;
   }
 }
 export namespace cfg {
@@ -361,12 +358,11 @@ export interface types {
     "SoftDeleteable": $default.SoftDeleteable;
   };
   "auth": {
-    "PermissionGrants": auth.PermissionGrants;
-    "PermissionGroups": auth.PermissionGroups;
-    "Permissions": auth.Permissions;
+    "Permission": auth.Permission;
+    "PermissionGrant": auth.PermissionGrant;
+    "PermissionGroup": auth.PermissionGroup;
     "Role": auth.Role;
     "User": auth.User;
-    "UserRoles": auth.UserRoles;
   };
   "cfg": {
     "ConfigObject": cfg.ConfigObject;

@@ -19,7 +19,10 @@ export class UserRepository {
 
     list() {
         let query = e.select(e.auth.User, () => ({
-            ...e.auth.User['*']
+            ...e.auth.User['*'],
+            role: {
+                ...e.auth.Role['*']
+            }
         }));
 
         return query.run(this.db.client);
@@ -28,6 +31,9 @@ export class UserRepository {
     async find(id: User['id']) {
         return (await e.select(e.auth.User, (user) => ({
             ...e.auth.User['*'],
+            role: {
+                ...e.auth.Role['*']
+            },
             filter_single: e.op(user.id, '=', id)
         })).run(this.db.client))[0];
     }
@@ -35,6 +41,9 @@ export class UserRepository {
     findByEmail(email: User['email']) {
         return e.select(e.auth.User, (user) => ({
             ...e.auth.User['*'],
+            role: {
+                ...e.auth.Role['*']
+            },
             filter_single: e.op(user.email, "=", email)
         })).run(this.db.client);
     }

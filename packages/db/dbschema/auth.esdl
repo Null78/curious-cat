@@ -1,4 +1,3 @@
-
 module auth {
     type User extending default::Entity, default::SoftDeleteable {
         required name: str;
@@ -6,6 +5,7 @@ module auth {
         required email: str;
         required password: str;
         email_verified_at: datetime;
+        required role: Role;
 
         constraint exclusive on (.email);
         constraint exclusive on (.username);
@@ -14,25 +14,27 @@ module auth {
     type Role extending default::Entity, default::SoftDeleteable {
         required name: str;
         required display_name: str;
+
+        constraint exclusive on (.name);
     }
 
-    type UserRoles extending default::Entity, default::SoftDeleteable {
-        required user: User;
-        required role: Role;
-    }
-
-    type PermissionGroups extending default::Entity {
+    type PermissionGroup extending default::Entity {
         required name: str;
         required display_name: str;
+
+        constraint exclusive on (.name);
     }
 
-    type Permissions extending default::Entity {
+    type Permission extending default::Entity {
         required name: str;
         required display_name: str;
         required permission_group: str;
+
+        constraint exclusive on (.name);
+        constraint exclusive on ((.name, .permission_group));
     }
 
-    type PermissionGrants extending default::Entity {
+    type PermissionGrant extending default::Entity {
         required permission: str;
         required provider: str {
             constraint one_of('User', 'Role');
